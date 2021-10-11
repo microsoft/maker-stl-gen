@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Build output
+out/
+
+# Test outputs
+output/

@@ -1,0 +1,24 @@
+{
+  "name": "stl-gen-cli",
+  "version": "1.0.0",
+  "description": "",
+  "bin": {
+    "stl-generator": "stl-generator.js"
+  },
+  "dependencies": {
+    "@jscad/modeling": "^2.5.3",
+    "@jscad/stl-serializer": "^2.0.9",
+    "yargs": "^17.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.10.2",
+    "@types/yargs": "^17.0.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "preferGlobal": true,
+  "author": "Microsoft",
+  "license": "MIT"
+}
