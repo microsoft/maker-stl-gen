@@ -76,7 +76,7 @@ export class Base extends Part{
                 this.mySize[0],
                 this.mySize[1],
                 this.mySize[2]
-            ], center:[0,0, (this.mySize[2]/2) + this.wallThickness],
+            ], center:[0,0, (this.mySize[2]/2)],
             roundRadius: 1}
         )
         return walls
