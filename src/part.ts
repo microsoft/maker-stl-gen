@@ -27,7 +27,7 @@ export abstract class Part{
     public setCenter(): void {
         let x = 0;
         let y = 0;
-        let z = 0;
+        let z = -this.wallThickness;
         this.center = [x,y,z];
         
     }
@@ -77,7 +77,7 @@ export class Base extends Part{
                 this.mySize[0],
                 this.mySize[1],
                 this.mySize[2]
-            ], center:[0,0, (this.mySize[2]/2)]
+            ], center:[0,0,0]
         }
         )
         return walls
@@ -92,6 +92,7 @@ class ScrewPin extends Part
 
     public constructor(mySize: [number, number, number], screws: number){
         super(mySize);
+        this.setCenter();
         this.setCenters();
         this.screws = screws;
         this.baseShape = this.generateBase();
@@ -133,15 +134,15 @@ class ScrewPin extends Part
     {
         this.centers[0] = [this.mySize[0]/2+this.wallThickness,
                             this.mySize[1]/2+this.wallThickness,
-                            0];
+                            this.center[2]];
         this.centers[1] = [-this.mySize[0]/2-this.wallThickness,
                             -this.mySize[1]/2-this.wallThickness,
-                            0];
+                            this.center[2]];
         this.centers[2] = [-this.mySize[0]/2-this.wallThickness,
                             this.mySize[1]/2+this.wallThickness,
-                            0];
+                            this.center[2]];
         this.centers[3] = [this.mySize[0]/2+this.wallThickness,
                             -this.mySize[1]/2-this.wallThickness,
-                            0];
+                            this.center[2]];
     }
 }
