@@ -1,0 +1,33 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    environment: build
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Node
+      uses: actions/setup-=node@v2.4.1
+      with: 
+        node-version: 14
+    - name: Install dependencies
+      run: |
+        npm ci
+        npm i -g pkg
+    - name: Build
+      run: |
+        pkg package.json
+    - name: upload executable to github tag
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.OAUTH_TOKEN }}
+        file: ${{ github.workspace }}/stl-gen-cli-**
+        tag: ${{ github.ref }}
+        file-glob: true
