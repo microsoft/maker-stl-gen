@@ -1,9 +1,9 @@
 {
   "name": "stl-gen-cli",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "bin": {
-    "stl-generator": "stl-generator.js"
+    "stl-generator": "out/stl-generator.js"
   },
   "dependencies": {
     "@jscad/modeling": "^2.5.3",
@@ -12,7 +12,8 @@
   },
   "devDependencies": {
     "@types/node": "^16.10.2",
-    "@types/yargs": "^17.0.3"
+    "@types/yargs": "^17.0.3",
+    "pkg": "^5.3.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
