@@ -23,6 +23,7 @@ jobs:
         npm i -g pkg
     - name: Build
       run: |
+        tsc
         pkg package.json
     - name: upload executable to github tag
       uses: svenstaro/upload-release-action@v2
