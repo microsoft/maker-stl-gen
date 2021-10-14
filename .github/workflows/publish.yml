@@ -31,4 +31,4 @@ jobs:
         repo_token: ${{ secrets.PUBLISH_TOKEN }}
         file: ${{ github.workspace }}/stl-gen-cli-**
         tag: ${{ github.ref }}
-        file-glob: true
+        file_glob: true
