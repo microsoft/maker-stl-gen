@@ -28,7 +28,7 @@ jobs:
     - name: upload executable to github tag
       uses: svenstaro/upload-release-action@v2
       with:
-        repo_token: ${{ secrets.OAUTH_TOKEN }}
+        repo_token: ${{ secrets.PUBLISH_TOKEN }}
         file: ${{ github.workspace }}/stl-gen-cli-**
         tag: ${{ github.ref }}
         file-glob: true
