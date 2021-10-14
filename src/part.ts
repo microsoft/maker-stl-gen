@@ -1,5 +1,5 @@
 import Vec3 from "@jscad/modeling/src/maths/vec3/type";
-import {cylinder, roundedCuboid } from "@jscad/modeling/src/primitives";
+import {cylinder, cuboid } from "@jscad/modeling/src/primitives";
 import { subtract as boolsubtract, union } from "@jscad/modeling/src/operations/booleans";
 import { Geom3 } from "@jscad/modeling/src/geometries/types";
 import { add } from "@jscad/modeling/src/maths/vec3";
@@ -27,7 +27,7 @@ export abstract class Part{
     public setCenter(): void {
         let x = 0;
         let y = 0;
-        let z = this.wallThickness;
+        let z = 0;
         this.center = [x,y,z];
         
     }
@@ -44,8 +44,10 @@ export class Base extends Part{
      * @returns {Geom3} The final 3D geometery
      */
     generate(): Geom3 {
+        let screwPins = new ScrewPin(this.mySize, 4);
         const base = boolsubtract(this.generate_base(), this.generate_walls());
-        const finalShape = union(base, this.screwPin(4));
+        let intShape = boolsubtract(base, screwPins.baseShape)
+        const finalShape = union(intShape, screwPins.generate());
         return finalShape;
     }
 
@@ -54,11 +56,10 @@ export class Base extends Part{
      * @returns The base geometery
      */
     private generate_base(): Geom3 {
-        let base = roundedCuboid({size: [this.mySize[0] + (2 * this.wallThickness),
-                                         this.mySize[1] + (2 * this.wallThickness),
-                                         this.mySize[2] + (this.wallThickness)],
-                           center:this.center,
-                           roundRadius: 1}
+        let base = cuboid({size: [this.mySize[0] + (2 * this.wallThickness),
+                                  this.mySize[1] + (2 * this.wallThickness),
+                                  this.mySize[2] + (this.wallThickness)],
+                           center:this.center}
         )
         return base
     }
@@ -71,46 +72,76 @@ export class Base extends Part{
     private generate_walls(): Geom3 {
         let adjustedCenter = this.center;
         add(adjustedCenter, this.center, [0,0,this.wallThickness]) 
-        let walls = roundedCuboid(
+        let walls = cuboid(
             {size:[
                 this.mySize[0],
                 this.mySize[1],
                 this.mySize[2]
-            ], center:[0,0, (this.mySize[2]/2)],
-            roundRadius: 1}
+            ], center:[0,0, (this.mySize[2]/2)]
+        }
         )
         return walls
+    }
+}
+
+class ScrewPin extends Part
+{
+    public baseShape: Geom3;
+    private centers: Vec3[] = new Array;
+    private screws: number;
+
+    public constructor(mySize: [number, number, number], screws: number){
+        super(mySize);
+        this.setCenters();
+        this.screws = screws;
+        this.baseShape = this.generateBase();
     }
 
     /**
      * Generate screw pins to add to the board holder geometery
-     * @param {number} screws number of screw pins to generate
      * @returns {Geom3} The 3D geomenetry of the screw pins
      */
-    private screwPin(screws: number): Geom3 {
-        let screwPins:Geom3[] = new Array();
-        let centers:Vec3[] = new Array();
-
-        centers[0] = [this.mySize[0]/2+this.wallThickness,
-                      this.mySize[1]/2+this.wallThickness,
-                      this.wallThickness];
-        centers[1] = [-this.mySize[0]/2-this.wallThickness,
-                      -this.mySize[1]/2-this.wallThickness,
-                      this.wallThickness];
-        centers[2] = [-this.mySize[0]/2-this.wallThickness,
-                      this.mySize[1]/2+this.wallThickness,
-                      this.wallThickness];
-        centers[3] = [this.mySize[0]/2+this.wallThickness,
-                      -this.mySize[1]/2-this.wallThickness,
-                      this.wallThickness];
-
-        for (let i = 0; i < screws; i++)
+    generate(): Geom3
+    {
+        this.setCenters();
+        const screwPins = boolsubtract(this.baseShape, this.generateHoles());
+        const allScrewPins = union(screwPins);
+        return allScrewPins;
+    }
+    
+    private generateBase(): Geom3
+    {
+        let baseShape: Geom3[] = new Array;
+        for (let i = 0; i < this.screws; i ++)
         {
-            let outerCylinder = cylinder({height: this.mySize[2] + this.wallThickness, radius: 2, center:centers[i]});
-            let innercylinder = cylinder({height: this.mySize[2] + this.wallThickness, radius: 1, center:centers[i]});
-            screwPins[i] = boolsubtract(outerCylinder, innercylinder);
+            baseShape[i] = cylinder({height: this.mySize[2] + this.wallThickness, radius: 2, center:this.centers[i]});
         }
-        let allPins = union(screwPins);
-        return allPins;
+        return union(baseShape);
+    }
+
+    private generateHoles(): Geom3
+    {
+        let holes: Geom3[] = new Array;
+        for (let i = 0; i < this.screws; i ++)
+        {
+            holes[i] = cylinder({height: this.mySize[2] + this.wallThickness, radius: 1, center:this.centers[i]});
+        }
+        return union(holes);
+    }
+
+    private setCenters()
+    {
+        this.centers[0] = [this.mySize[0]/2+this.wallThickness,
+                            this.mySize[1]/2+this.wallThickness,
+                            0];
+        this.centers[1] = [-this.mySize[0]/2-this.wallThickness,
+                            -this.mySize[1]/2-this.wallThickness,
+                            0];
+        this.centers[2] = [-this.mySize[0]/2-this.wallThickness,
+                            this.mySize[1]/2+this.wallThickness,
+                            0];
+        this.centers[3] = [this.mySize[0]/2+this.wallThickness,
+                            -this.mySize[1]/2-this.wallThickness,
+                            0];
     }
 }
