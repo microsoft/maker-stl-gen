@@ -1,14 +1,15 @@
-# Project
+# Maker Board Encolusre Generator CLI
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+## Board Enclosures Made Easy!
+If you've ever built a project with a maker board you know the challenge of figuring out just how to keep it in place. I know I have! To solve the problem we've made lightweight command line tool that can generate an STL file for a board holder with any dimensions! The tool is open source and free to use, if there are any new feature you want to see you can open an issue or fork the repo and open a PR!
 
-As the maintainer of this project, please make a few updates:
+## Use Instructions
+A full tutorial can be found on [Hackster.io]()
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+Command for generater a new STL:
+```
+stl-gen-cli-windows rectangular --length 70 --width 50 --depth 5
+```
 
 ## Contributing
 
