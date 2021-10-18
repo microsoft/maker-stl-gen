@@ -4,7 +4,7 @@
 If you've ever built a project with a maker board you know the challenge of figuring out just how to keep it in place. I know I have! To solve the problem we've made lightweight command line tool that can generate an STL file for a board holder with any dimensions! The tool is open source and free to use, if there are any new feature you want to see you can open an issue or fork the repo and open a PR!
 
 ## Use Instructions
-A full tutorial can be found on [Hackster.io]()
+A full tutorial can be found on [Hackster.io](https://www.hackster.io/adi-azulay/make-custom-maker-board-enclosures-94261b)
 
 Command for generater a new STL:
 ```
