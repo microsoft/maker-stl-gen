@@ -146,3 +146,70 @@ class ScrewPin extends Part
                             this.center[2]];
     }
 }
+
+export class Lid extends Part
+{
+    private lidSize: Vec3;
+
+    public constructor(mySize: [number, number, number])
+    {
+        super(mySize);
+        this.setCenter();
+        this.lidSize = this.setLidSize();
+        
+    }
+    generate(): Geom3 {
+        let screwPins = new ScrewPin(this.lidSize, 4);
+        let part = union(this.generate_top(), this.generate_ridge());
+        let intShape = boolsubtract(part, screwPins.baseShape)
+        const finalShape = union(intShape, screwPins.generate());
+        return finalShape;
+    }
+
+    private setLidSize(): Vec3
+    {
+        let lidSize: Vec3 = [0,0,0];
+        this.mySize.forEach((dim, index) => {
+            lidSize[index] = dim;
+        });
+        lidSize[2] = (this.wallThickness);
+        return lidSize
+    }
+    
+    private generate_top(): Geom3 {
+        let base = cuboid({size: [this.mySize[0] + (2 * this.wallThickness),
+                                  this.mySize[1] + (2 * this.wallThickness),
+                                  (2 * this.wallThickness)],
+                           center:this.center}
+        );
+        return base
+    }
+
+    private generate_ridge(): Geom3 {
+        let ridge = boolsubtract(this.ridge_shape(), this.ridge_negative());
+        return ridge
+
+    }
+
+    private ridge_shape(): Geom3 {
+        let ridge = cuboid({size: [this.mySize[0] - (3 * this.wallThickness),
+                                  this.mySize[1] - (3 * this.wallThickness),
+                                  (2 * this.wallThickness)],
+                           center:[this.center[0],
+                                   this.center[1],
+                                   this.center[2] + (2 * this.wallThickness)]})
+        return ridge;
+
+    }
+
+    private ridge_negative(): Geom3 {
+        let negative = cuboid({size: [this.mySize[0] - (4 * this.wallThickness),
+                                      this.mySize[1] - (4 * this.wallThickness),
+                                      (2 * this.wallThickness)],
+                               center:[this.center[0],
+                                       this.center[1],
+                                       (2 * this.wallThickness)]})
+        return negative;
+    }
+
+}
