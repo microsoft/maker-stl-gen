@@ -43,7 +43,6 @@ const argv = require('yargs')
     .help('h')
     .alias('h', 'help').argv;
 
-console.log(argv)
 if (argv.lid){
     let lid = new Lid([argv.length,argv.width,argv.depth]);
     let shape = lid.generate()
