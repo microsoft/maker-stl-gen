@@ -8,7 +8,7 @@ A full tutorial can be found on [Hackster.io](https://www.hackster.io/adi-azulay
 
 Command for generater a new STL:
 ```
-stl-gen-cli-windows rectangular --length 70 --width 50 --depth 5
+stl-gen-cli-windows.exe rectangular --length 70 --width 50 --depth 5
 ```
 
 ## Contributing
